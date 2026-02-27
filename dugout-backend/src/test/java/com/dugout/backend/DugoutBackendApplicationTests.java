@@ -1,0 +1,13 @@
+package com.dugout.backend;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class DugoutBackendApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
