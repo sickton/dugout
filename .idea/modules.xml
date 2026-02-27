@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Dugout.iml" filepath="$PROJECT_DIR$/.idea/Dugout.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dugout-frontend/dugout-frontend.iml" filepath="$PROJECT_DIR$/dugout-frontend/dugout-frontend.iml" />
       <module fileurl="file://$PROJECT_DIR$/dugout-ml/dugout-ml.iml" filepath="$PROJECT_DIR$/dugout-ml/dugout-ml.iml" />
     </modules>
   </component>
