@@ -87,8 +87,10 @@ Note: `spring.jpa.database-platform` is redundant in Hibernate 7 (auto-detected)
 ✓ Python venv at dugout-ml/.venv with pandas, numpy, scikit-learn,
   matplotlib, seaborn, ipykernel, jupyter_core, jupyter_client installed
 ✓ Jupyter notebook runs inside IntelliJ (Python plugin installed)
-✓ Player role classifier trained — Random Forest, 84% accuracy, 7 roles,
+✓ Player role classifier trained — Random Forest, 94.81% accuracy, 7 roles,
   2,214 players from FBref Big 5 leagues 2024-25
+✓ Model saved to dugout-ml/models/role_classifier.joblib
+✓ Players exported to dugout-ml/data/players.json (2,214 players, role + zone)
 ✓ Vite React frontend runs on port 5173
 ✓ PostgreSQL 18.3 running locally with dugout database created
 ✓ All three modules committed and pushed to GitHub
@@ -263,7 +265,6 @@ Every match gets a unique UUID as matchId. All state is stored per matchId. No s
 ## What Has NOT Been Built Yet
 
 ```
-→ Player role classifier JSON export (model trained, output not yet saved)
 → Player ability scoring (attacking, defending, passing scores per player)
 → Simulation engine Java implementation
 → REST API endpoints
