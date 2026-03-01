@@ -25,11 +25,11 @@ Someone with a slight idea about football. They know there are two teams, 11 pla
 
 ```
 Backend:     Java 21 + Spring Boot 4.0.3 (Maven)
-ML:          Python 3.14 + scikit-learn, pandas, numpy
+ML:          Python 3.13 + scikit-learn, pandas, numpy, matplotlib, seaborn, ipykernel
 Frontend:    Vite + React (JavaScript)
-Database:    PostgreSQL (local, database name: dugout)
+Database:    PostgreSQL 18.3 (local, database name: dugout)
 Repo:        GitHub — sickton/dugout (public)
-IDE:         IntelliJ IDEA Ultimate
+IDE:         IntelliJ IDEA Ultimate (Python plugin installed for notebook support)
 ```
 
 ---
@@ -66,14 +66,17 @@ Dugout/                          ← root repo (cloned from GitHub)
 ## Current application.properties
 
 ```properties
+spring.application.name=dugout-backend
 spring.datasource.url=jdbc:postgresql://localhost:5432/dugout
 spring.datasource.username=postgres
-spring.datasource.password=[user's actual password]
+spring.datasource.password=postgres123
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 spring.datasource.hikari.initialization-fail-timeout=-1
 ```
+
+Note: `spring.jpa.database-platform` is redundant in Hibernate 7 (auto-detected) but harmless.
 
 ---
 
@@ -81,9 +84,13 @@ spring.datasource.hikari.initialization-fail-timeout=-1
 
 ```
 ✓ Spring Boot backend starts and connects to PostgreSQL on port 8080
-✓ Python venv active with pandas, numpy, scikit-learn, matplotlib, seaborn installed
+✓ Python venv at dugout-ml/.venv with pandas, numpy, scikit-learn,
+  matplotlib, seaborn, ipykernel, jupyter_core, jupyter_client installed
+✓ Jupyter notebook runs inside IntelliJ (Python plugin installed)
+✓ Player role classifier trained — Random Forest, 84% accuracy, 7 roles,
+  2,214 players from FBref Big 5 leagues 2024-25
 ✓ Vite React frontend runs on port 5173
-✓ PostgreSQL running locally with dugout database created
+✓ PostgreSQL 18.3 running locally with dugout database created
 ✓ All three modules committed and pushed to GitHub
 ```
 
@@ -170,12 +177,14 @@ Goalkeeper   → defending is everything
 
 ## ML Components
 
-### 1. Player Role Classifier (CURRENT PRIORITY)
+### 1. Player Role Classifier (TRAINED — export pending)
 **What:** Classifies players into specific roles — Striker, Winger, Central Mid, Defensive Mid, Fullback, Centre Back, Goalkeeper
 **Why:** The simulation needs to know which zone each player belongs to and which ability dimension applies
-**Data:** Big 5 European leagues 2024-25 player stats from Kaggle
-**Approach:** Supervised classification (Random Forest or similar) trained on player stats with FBref position codes as labels
-**Output:** Role label + zone assignment per player
+**Data:** FBref Big 5 European leagues 2024-25 — 2,214 players after filtering (≥3 90s played)
+**Approach:** Rule-based labels → RandomForestClassifier (200 trees, class_weight='balanced')
+**Results:** 84% accuracy. GK/CB near-perfect. Winger weakest (72% F1).
+**Validated against:** Haaland→Striker, Salah→Winger, Van Dijk→CB, Trent→Fullback — all correct.
+**Still needed:** Save model to disk (.joblib), export role-labelled player JSON, calculate ability scores
 
 ### 2. Goal Probability Model
 **What:** Predicts probability of a goal given match context
@@ -254,7 +263,8 @@ Every match gets a unique UUID as matchId. All state is stored per matchId. No s
 ## What Has NOT Been Built Yet
 
 ```
-→ Player role classifier (current priority — data collected, not yet trained)
+→ Player role classifier JSON export (model trained, output not yet saved)
+→ Player ability scoring (attacking, defending, passing scores per player)
 → Simulation engine Java implementation
 → REST API endpoints
 → React frontend UI
@@ -270,11 +280,12 @@ Every match gets a unique UUID as matchId. All state is stored per matchId. No s
 ## What To Build First — The Order
 
 ```
-1. Player role classifier (dugout-ml)
-   → Clean the Kaggle dataset
-   → Engineer features
-   → Train classifier
-   → Output role-labelled player JSON
+1. Player role classifier (dugout-ml) ← IN PROGRESS
+   ✓ Clean the dataset
+   ✓ Engineer features (24 per-90 metrics)
+   ✓ Train classifier (Random Forest, 84% accuracy)
+   → Save model to dugout-ml/models/role_classifier.joblib
+   → Export role-labelled player JSON to dugout-ml/data/players.json
 
 2. Player ability scoring (dugout-ml)
    → Calculate attacking, defending, passing scores per role
@@ -331,5 +342,5 @@ Ligue 1:         PSG
 ---
 
 *Project started: February 2026*
-*Status: Foundation complete — three modules running, starting ML classifier next*
+*Status: ML classifier trained (84% acc) — next: export model + player JSON, then ability scoring*
 *GitHub: https://github.com/sickton/dugout*
