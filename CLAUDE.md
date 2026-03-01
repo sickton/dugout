@@ -8,7 +8,7 @@
 **Dugout** is a full-stack football management simulator designed to make football understandable and engaging for complete beginners. The user takes the role of a football manager for one simulated 90-minute match. They make real decisions in plain English when the game asks for them. The AI manages the opposing team. At full time, the product checks whether this fixture happened in real life in the last 5 years and compares the user's result to what actually happened.
 
 **The core insight driving everything:**
-A 0-0 scoreline looks like nothing happened. In reality it is often the most tactically rich result in football — two teams so intelligently organised that neither could break the other down. Dugout makes beginners feel that, not just understand it intellectually.
+A 0-0 scoreline looks like nothing happened. In reality, it is often the most tactically rich result in football — two teams so intelligently organized that neither could break the other down. Dugout makes beginners feel that, not just understand it intellectually.
 
 **The one sentence:**
 > A football companion that puts complete beginners in the dugout — making real decisions, feeling real consequences, and understanding for the first time what actually happens across 90 minutes of football.
@@ -114,7 +114,7 @@ The simulation models two agents sharing one resource — the ball. At any momen
 Defensive Third → Midfield → Attacking Third
 ```
 
-Players are drawn from zone-appropriate positions. A centre back does not appear as a chance-taker. A striker does not appear making a tackle in the defensive third unless specifically triggered by a set piece.
+Players are drawn from zone-appropriate positions. A center back does not appear as a chance-taker. A striker does not appear making a tackle in the defensive third unless specifically triggered by a set piece.
 
 ### Event Loop
 For every event the engine asks:
@@ -180,18 +180,18 @@ Goalkeeper   → defending is everything
 ## ML Components
 
 ### 1. Player Role Classifier (TRAINED — export pending)
-**What:** Classifies players into specific roles — Striker, Winger, Central Mid, Defensive Mid, Fullback, Centre Back, Goalkeeper
+**What:** Classifies players into specific roles — Striker, Winger, Central Mid, Defensive Mid, Fullback, Center Back, Goalkeeper
 **Why:** The simulation needs to know which zone each player belongs to and which ability dimension applies
 **Data:** FBref Big 5 European leagues 2024-25 — 2,214 players after filtering (≥3 90s played)
 **Approach:** Rule-based labels → RandomForestClassifier (200 trees, class_weight='balanced')
 **Results:** 84% accuracy. GK/CB near-perfect. Winger weakest (72% F1).
 **Validated against:** Haaland→Striker, Salah→Winger, Van Dijk→CB, Trent→Fullback — all correct.
-**Still needed:** Save model to disk (.joblib), export role-labelled player JSON, calculate ability scores
+**Still needed:** Save model to disk (.joblib), export role-labeled player JSON, calculate ability scores
 
 ### 2. Goal Probability Model
 **What:** Predicts probability of a goal given match context
 **Why:** Calibrates simulation randomness with real football data instead of hand-tuned numbers
-**Features:** Team attack vs defence rating differential, player ability score, zone, match minute, score state
+**Features:** Team attack vs defense rating differential, player ability score, zone, match minute, score state
 **Approach:** Logistic regression or gradient boosting trained on historical match data
 **Output:** Probability value 0-1 used in simulation goal resolution
 
@@ -205,7 +205,7 @@ Goalkeeper   → defending is everything
 **What:** Finds the most similar real fixture to the user's simulated match
 **Why:** Powers the killer feature — "this is what actually happened"
 **Features:** Teams, scoreline progression, chance counts, possession, momentum shifts
-**Approach:** Cosine similarity or k-nearest neighbours on match feature vectors
+**Approach:** Cosine similarity or k-nearest neighbors on match feature vectors
 **Output:** Closest real fixture from 5-year historical database
 
 ---
